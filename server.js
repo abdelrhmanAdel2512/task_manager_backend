@@ -8,6 +8,7 @@ const logger = require('./src/utils/logger');
 // Connect to MongoDB (Mongoose buffers queries until connected)
 connectDB().catch((err) => {
   logger.error('Failed to connect to MongoDB:', err.message);
+  process.exit(1);
 });
 
 // For local testing (Vercel sets its own environment)
