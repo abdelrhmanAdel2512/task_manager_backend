@@ -25,10 +25,6 @@ const logger = createLogger({
   format: isDev ? devFormat : prodFormat,
   transports: [
     new transports.Console(),
-    ...(isDev ? [] : [
-      new transports.File({ filename: 'logs/error.log', level: 'error' }),
-      new transports.File({ filename: 'logs/combined.log' }),
-    ]),
   ],
   silent: process.env.NODE_ENV === 'test',
 });
