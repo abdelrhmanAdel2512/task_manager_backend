@@ -1,10 +1,10 @@
 'use strict';
 
 const Project = require('../models/project.model');
-const { createSuccessResponse } = require('../utils/response');
+const ApiResponse = require('../utils/ApiResponse');
+const asyncHandler = require('../utils/asyncHandler');
 
-exports.getStats = async (req, res, next) => {
-  try {
+exports.getStats = asyncHandler(async (req, res, next) => {
     const userId = req.user._id;
 
     const stats = await Project.aggregate([
@@ -40,8 +40,5 @@ exports.getStats = async (req, res, next) => {
         s.totalTasks === 0 ? 0 : Math.round((s.doneTasks / s.totalTasks) * 100);
     }
 
-    res.status(200).json(createSuccessResponse(data, 'Stats retrieved successfully'));
-  } catch (error) {
-    next(error);
-  }
-};
+    ApiResponse.ok(res, data, 'Stats retrieved successfully');
+});
