@@ -26,7 +26,7 @@ const listProjects = async ({ ownerId, status, page = 1, limit = 20 }) => {
   ]);
 
   return {
-    projects,
+    data: projects,
     pagination: {
       total,
       page,

@@ -44,7 +44,7 @@ const listTasks = async ({ projectId, ownerId, status, priority, page = 1, limit
   ]);
 
   return {
-    tasks,
+    data: tasks,
     pagination: {
       total,
       page,
