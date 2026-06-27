@@ -2,9 +2,9 @@
 
 const router = require('express').Router();
 const statsController = require('../controllers/stats.controller');
-const { requireAuth } = require('../middlewares/auth.middleware');
+const { protect } = require('../middlewares/auth.middleware');
 
 // GET /v1/stats
-router.get('/', requireAuth, statsController.getStats);
+router.get('/', protect, statsController.getStats);
 
 module.exports = router;
