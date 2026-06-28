@@ -42,10 +42,15 @@ const taskSchema = new mongoose.Schema(
       enum: { values: TASK_PRIORITIES, message: '{VALUE} is not a valid priority' },
       default: 'medium',
     },
+    deadline: {
+      type: Date,
+      default: null,
+    },
   },
   {
     timestamps: true,
     toJSON: {
+      virtuals: true,
       transform(_, ret) {
         ret.id = ret._id;
         ret.project_id = ret.project;
@@ -58,6 +63,13 @@ const taskSchema = new mongoose.Schema(
     },
   }
 );
+
+// ── Virtuals ──────────────────────────────────────────────────────────────────
+taskSchema.virtual('is_overdue').get(function () {
+  if (!this.deadline) return false;
+  if (this.status === 'done' || this.status === 'cancelled') return false;
+  return new Date() > this.deadline;
+});
 
 // ── Compound indexes for filtered task listing ────────────────────────────────
 taskSchema.index({ project: 1, status: 1 });

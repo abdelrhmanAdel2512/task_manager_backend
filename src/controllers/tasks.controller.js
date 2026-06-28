@@ -27,11 +27,11 @@ const getTask = asyncHandler(async (req, res) => {
 });
 
 const createTask = asyncHandler(async (req, res) => {
-  const { title, description, status, priority } = req.body;
+  const { title, description, status, priority, deadline } = req.body;
   const task = await tasksService.createTask({
     projectId: req.params.projectId,
     ownerId: req.user._id,
-    title, description, status, priority,
+    title, description, status, priority, deadline,
   });
   ApiResponse.created(res, task, 'Task created successfully');
 });

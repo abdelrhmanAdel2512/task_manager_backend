@@ -59,7 +59,7 @@ const getTask = async ({ taskId, projectId, ownerId }) => {
   return findTaskOrFail(taskId, projectId, ownerId);
 };
 
-const createTask = async ({ projectId, ownerId, title, description, status, priority }) => {
+const createTask = async ({ projectId, ownerId, title, description, status, priority, deadline }) => {
   await verifyProjectOwnership(projectId, ownerId);
 
   const task = await Task.create({
@@ -69,6 +69,7 @@ const createTask = async ({ projectId, ownerId, title, description, status, prio
     description: description || '',
     status: status || 'pending',
     priority: priority || 'medium',
+    deadline: deadline || null,
   });
 
   // Keep parent project counters accurate
@@ -81,7 +82,7 @@ const updateTask = async ({ taskId, projectId, ownerId, updates }) => {
   await verifyProjectOwnership(projectId, ownerId);
   const task = await findTaskOrFail(taskId, projectId, ownerId);
 
-  const allowedFields = ['title', 'description', 'status', 'priority'];
+  const allowedFields = ['title', 'description', 'status', 'priority', 'deadline'];
   allowedFields.forEach((field) => {
     if (updates[field] !== undefined) {
       task[field] = updates[field];

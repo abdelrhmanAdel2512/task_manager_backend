@@ -22,6 +22,10 @@ const createTaskRules = [
   body('priority')
     .notEmpty().withMessage('Priority is required')
     .isIn(TASK_PRIORITIES).withMessage(`Priority must be one of: ${TASK_PRIORITIES.join(', ')}`),
+
+  body('deadline')
+    .optional({ nullable: true })
+    .isISO8601().withMessage('Deadline must be a valid date'),
 ];
 
 // Update: all fields optional
@@ -43,6 +47,10 @@ const updateTaskRules = [
   body('priority')
     .optional()
     .isIn(TASK_PRIORITIES).withMessage(`Priority must be one of: ${TASK_PRIORITIES.join(', ')}`),
+
+  body('deadline')
+    .optional({ nullable: true })
+    .isISO8601().withMessage('Deadline must be a valid date'),
 ];
 
 // Status-only change
