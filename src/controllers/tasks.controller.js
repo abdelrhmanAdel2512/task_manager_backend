@@ -17,6 +17,18 @@ const listTasks = asyncHandler(async (req, res) => {
   ApiResponse.ok(res, result);
 });
 
+const listAllTasks = asyncHandler(async (req, res) => {
+  const { status, priority, page, limit } = req.query;
+  const result = await tasksService.listAllTasks({
+    ownerId: req.user._id,
+    status,
+    priority,
+    page: page ? parseInt(page) : 1,
+    limit: limit ? parseInt(limit) : 50,
+  });
+  ApiResponse.ok(res, result);
+});
+
 const getTask = asyncHandler(async (req, res) => {
   const task = await tasksService.getTask({
     taskId: req.params.taskId,
@@ -65,4 +77,4 @@ const deleteTask = asyncHandler(async (req, res) => {
   ApiResponse.noContent(res);
 });
 
-module.exports = { listTasks, getTask, createTask, updateTask, changeTaskStatus, deleteTask };
+module.exports = { listTasks, listAllTasks, getTask, createTask, updateTask, changeTaskStatus, deleteTask };

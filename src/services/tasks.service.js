@@ -54,6 +54,32 @@ const listTasks = async ({ projectId, ownerId, status, priority, page = 1, limit
   };
 };
 
+const listAllTasks = async ({ ownerId, status, priority, page = 1, limit = 50 }) => {
+  const filter = { owner: ownerId };
+  if (status) filter.status = status;
+  if (priority) filter.priority = priority;
+
+  const skip = (page - 1) * limit;
+  const [tasks, total] = await Promise.all([
+    Task.find(filter)
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit)
+      .populate('project', 'name color status'),
+    Task.countDocuments(filter),
+  ]);
+
+  return {
+    data: tasks,
+    pagination: {
+      total,
+      page,
+      limit,
+      total_pages: Math.ceil(total / limit),
+    },
+  };
+};
+
 const getTask = async ({ taskId, projectId, ownerId }) => {
   await verifyProjectOwnership(projectId, ownerId);
   return findTaskOrFail(taskId, projectId, ownerId);
@@ -116,6 +142,7 @@ const deleteTask = async ({ taskId, projectId, ownerId }) => {
 
 module.exports = {
   listTasks,
+  listAllTasks,
   getTask,
   createTask,
   updateTask,

@@ -53,7 +53,13 @@ const taskSchema = new mongoose.Schema(
       virtuals: true,
       transform(_, ret) {
         ret.id = ret._id;
-        ret.project_id = ret.project;
+        if (ret.project && typeof ret.project === 'object' && ret.project._id) {
+          ret.project_id = ret.project._id;
+          ret.project_name = ret.project.name;
+          ret.project_color = ret.project.color;
+        } else {
+          ret.project_id = ret.project;
+        }
         delete ret._id;
         delete ret.__v;
         delete ret.project;

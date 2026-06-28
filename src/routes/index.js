@@ -14,5 +14,8 @@ router.use('/stats',    statsRoutes);
 
 // Tasks are nested under projects: /projects/:projectId/tasks
 router.use('/projects/:projectId/tasks', taskRoutes);
+// Global tasks for logged in user
+const globalTasksRoutes = require('./global_tasks.routes');
+router.use('/tasks', globalTasksRoutes);
 
 module.exports = router;
